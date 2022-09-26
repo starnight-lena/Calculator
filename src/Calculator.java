@@ -1,43 +1,17 @@
 import java.util.Collections;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.Scanner;
 
 public class Calculator {
 
+
     public static void main(String[] args) throws MyException{
+        Scanner in = new Scanner(System.in);
+        System.out.print("Введите выражение: ");
+        String input = in.nextLine();
 
-        String[] normal_tests = {"1 + 2", "10 * 4", "3 - 10", "3 / 10", "I + IV", "II * IV", "VI / III", "X - I"};
-        int i = 1;
-        System.out.println("---------------------------------------------------");
-        System.out.print(Color.YELLOW);
-        System.out.println("NORMAL TESTS");
-        System.out.print(Color.RESET);
-        System.out.println("---------------------------------------------------");
-
-        for(String x:normal_tests) {
-
-            System.out.print(Color.GREEN);
-            System.out.println("Тест №" + i);
-            System.out.print(Color.RESET);
-
-            System.out.print(x + " = ");
-            test(x);
-            System.out.println("---------------------------------------------------");
-            i++;
-        }
-
-        String[] failed_tests = {"I - II", "I + 1", "1", "1 + 2 + 3"};
-        //выбираем какой тест хотим проверить
-        String fail = failed_tests[3];
-        System.out.print(Color.RED);
-        System.out.println("FAIL TESTS");
-        System.out.print(Color.RESET);
-        System.out.println("---------------------------------------------------");
-        System.out.println(fail);
-        test(fail);
-        System.out.println("---------------------------------------------------");
-    }
-    static void test(String input) throws MyException {
+        in.close();
         if (!exam1(input)){
             throw new MyException("throws Exception //т.к. строка не является математической операцией");
         }
@@ -51,7 +25,6 @@ public class Calculator {
             System.out.println(calc(input));
 
         }
-
     }
 
     public static String calc(String input) throws MyException{
@@ -176,26 +149,5 @@ public class Calculator {
             units = Collections.unmodifiableNavigableMap(initMap);
         }
     }
-
-    enum Color {
-        //Color end string, color reset
-        RESET("\033[0m"),
-        YELLOW ("\u001B[33m"),
-        RED ("\u001B[31m"),
-
-        GREEN("\033[0;32m");  // GREEN
-
-        private final String code;
-
-        Color(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String toString() {
-            return code;
-        }
-    }
-
 
 }
