@@ -1,12 +1,41 @@
+import java.util.Collections;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
 public class Calculator {
 
     public static void main(String[] args) throws MyException{
 
-        String[] tests = {"1 + 2", "VI / III", "I - II", "I + 1"};
+        String[] normal_tests = {"1 + 2", "10 * 4", "3 - 10", "3 / 10", "I + IV", "II * IV", "VI / III", "X - I"};
+        int i = 1;
+        System.out.println("---------------------------------------------------");
+        System.out.print(Color.YELLOW);
+        System.out.println("NORMAL TESTS");
+        System.out.print(Color.RESET);
+        System.out.println("---------------------------------------------------");
 
-        for(String x:tests) {
+        for(String x:normal_tests) {
+
+            System.out.print(Color.GREEN);
+            System.out.println("Тест №" + i);
+            System.out.print(Color.RESET);
+
+            System.out.print(x + " = ");
             test(x);
+            System.out.println("---------------------------------------------------");
+            i++;
         }
+
+        String[] failed_tests = {"I - II", "I + 1", "1", "1 + 2 + 3"};
+        //выбираем какой тест хотим проверить
+        String fail = failed_tests[3];
+        System.out.print(Color.RED);
+        System.out.println("FAIL TESTS");
+        System.out.print(Color.RESET);
+        System.out.println("---------------------------------------------------");
+        System.out.println(fail);
+        test(fail);
+        System.out.println("---------------------------------------------------");
     }
     static void test(String input) throws MyException {
         if (!exam1(input)){
@@ -64,7 +93,15 @@ public class Calculator {
         if (!"12345678910".contains(expr[0]) && result < 0) {
             throw new MyException("throws Exception //т.к. в римской системе нет отрицательных чисел");
         }
-        else{
+        else if (!"12345678910".contains(expr[0]))
+        {
+            Converter res = new Converter();
+            return res.intToRoman(result);
+
+        }
+        else
+
+        {
             return "" + result;
         }
 
@@ -104,6 +141,60 @@ public class Calculator {
             return decimalNumb;
         }
 
+    }
+    static class Converter {
+
+        public static String intToRoman(int number) {
+            if (number >= 4000 || number <= 0)
+                return null;
+            StringBuilder result = new StringBuilder();
+            for(Integer key : units.descendingKeySet()) {
+                while (number >= key) {
+                    number -= key;
+                    result.append(units.get(key));
+                }
+            }
+            return result.toString();
+        }
+
+        private static final NavigableMap<Integer, String> units;
+        static {
+            NavigableMap<Integer, String> initMap = new TreeMap<>();
+            initMap.put(1000, "M");
+            initMap.put(900, "CM");
+            initMap.put(500, "D");
+            initMap.put(400, "CD");
+            initMap.put(100, "C");
+            initMap.put(90, "XC");
+            initMap.put(50, "L");
+            initMap.put(40, "XL");
+            initMap.put(10, "X");
+            initMap.put(9, "IX");
+            initMap.put(5, "V");
+            initMap.put(4, "IV");
+            initMap.put(1, "I");
+            units = Collections.unmodifiableNavigableMap(initMap);
+        }
+    }
+
+    enum Color {
+        //Color end string, color reset
+        RESET("\033[0m"),
+        YELLOW ("\u001B[33m"),
+        RED ("\u001B[31m"),
+
+        GREEN("\033[0;32m");  // GREEN
+
+        private final String code;
+
+        Color(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return code;
+        }
     }
 
 
